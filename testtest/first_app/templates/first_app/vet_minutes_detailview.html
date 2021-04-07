@@ -1,0 +1,94 @@
+{% extends "first_app_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<div class="container">
+<h2>Vet Ops Brief / EODD Minutes</h2><br>
+
+<form method="POST" name="form1">
+  {% csrf_token %}
+
+  <p class="lead"><b>{{  minutes.date }} {{ minutes.type_of_minutes }}</b></p>
+
+  <p class="lead"><b>Prepared By: {{ minutes.minutes_taker }}</b></p>
+
+  <p class="lead"><b>Duty Instructor: {{ minutes.duty_instructor }}</b></p>
+
+  <table id="minutes-table">
+    <tr>
+      <th>Speaker</th>
+      <th>Message</th>
+    </tr>
+    {% for write_up in write_ups %}
+    <tr>
+      <td style="vertical-align: top;"><input class="form-control" type="text" id="speaker0" name="speaker" placeholder="Speaker" value="{{write_up.who_talked}}"></td>
+      <td><textarea class="form-control" id="write_up0" name="write_up" rows="4" cols="50" placeholder="Message">{{ write_up.write_up }}</textarea></td>
+    </tr>
+    {% endfor %}
+  </table>
+<br>
+<button style="padding:0;" type="button" class="btn btn-dark mr-auto" id="add-new-row">Add New Row</button><br><br>
+
+<div class="accordion" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          View Absentees
+        </button>
+      </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        <ul class="list-group">
+          {% for absentee in absentees %}
+            <li class="list-group-item">{{ absentee.absent_user }}</li>
+          {% endfor %}
+        </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<br>
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#toSubmit">
+  Sign
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="toSubmit" tabindex="-1" aria-labelledby="submitModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="submit-modal-body">
+        Are you sure you want to sign?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <input type="submit" class="btn btn-primary" name="submit" value="Sign">
+      </div>
+    </div>
+  </div>
+</div>
+
+</form>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src={% static 'first_app/minutes.js' %}></script>
+
+{% endblock %}

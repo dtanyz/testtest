@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="jumbotron">
+        <h2>All Ops Brief & EODD Minutes</h2><br>
+        {% if minutes_not_signed %}
+            <h4>Minutes Not Signed:</h4>
+            <ul>
+            {% for minutes in minutes_not_signed %}
+              <li>
+              <a href="{% url 'opsbrief_minutes_detailview' minutes_id=minutes.minutes.id %}">Minutes for Ops Brief on {{ minutes.minutes.date }}</a>
+              </li>
+
+            {% endfor %}
+            </ul><br>
+        <h4>Minutes Signed:</h4>
+        {% endif %}
+        {% for minutes in all_minutes %}
+            <p><a href="{% url 'opsbrief_minutes_detailview' minutes_id=minutes.id %}">Minutes for Ops Brief on {{ minutes.date }}</a></p>
+        {% endfor %}
+
+    </div>
+</div>
+
+
+
+{% endblock %}

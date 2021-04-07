@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Callsign</th>
+      <th scope="col">Boldface</th>
+      <th scope="col">Ops Limit</th>
+      <th scope="col">SAM</th>
+      <th scope="col">Ops Brief/EODD</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in all_users %}
+      <tr>
+      <th scope="row">{{user}}</th>
+      <td>
+        {% if user.bfa_pass and user.bfb_pass %}
+          Done
+        {% else %}
+          Not Done
+        {% endif %}
+      </td>
+      <td>
+        {% if user.opslimit_pass %}
+          Done
+        {% else %}
+          Not Done
+        {% endif %}
+      </td>
+      <td>
+        {% if user.sam_signed %}
+          Done
+        {% else %}
+          Not Done
+        {% endif %}
+      </td>      
+      <td>
+        {% if user.opsbrief_signed %}
+          Done
+        {% else %}
+          Not Done
+        {% endif %}
+      </td>      
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+{% endblock %}

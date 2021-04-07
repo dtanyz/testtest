@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container">
+    <h2>{{ minutes.date }} Ops Brief Minutes</h2>
+    <br>
+
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th style ="width: 20%;" scope="col">Speaker</th>
+          <th style ="width: 80%;" scope="col">Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for write_up in write_ups %}
+        <tr>
+            <td>{{ write_up.who_talked }}</td>
+            <td>{{ write_up.write_up }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if absent %}
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-check text-center">
+        <input class="form-check-input" type="checkbox" onchange="document.getElementById('sign').disabled = !this.checked;" name="readminutes" value="readminutes" id="readminutes">
+        <label class="form-check-label" for="sign">
+          I have read the minutes
+        </label>
+      </div>
+      <p class="text-center"><input type="submit" id="sign" class="btn btn-primary" name="Sign" value="Sign" disabled></p>
+
+    </form>
+    {% endif %}
+
+</div>
+
+
+
+{% endblock %}

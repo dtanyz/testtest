@@ -1,0 +1,131 @@
+{% extends "first_app_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<div class="container">
+<h2>Write Ops Brief / EODD Minutes</h2><br>
+
+<form method="POST" name="form1">
+  {% csrf_token %}
+
+  <div class="row">
+    <div class="col-4">
+      <input class="form-control" style="max-width:250px;" type="text" id="datepicker" name="datepicker" placeholder="Date" autocomplete="off">
+    </div>
+    <div class="col-5">
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary active">
+          <input type="radio" name="type_of_minutes" id="ops_brief" value="Ops Brief" checked> Ops Brief
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="type_of_minutes" id="eodd" value="EODD"> EODD
+        </label>
+    </div>
+    </div>
+  </div><div id="date_error"></div><br>
+
+  <label for="date">Prepared By:</label>
+  <select class="custom-select" style="max-width:250px;" id="minutes_taker" name="minutes_taker">
+    <option selected>Choose...</option>
+    {% for user in all_users %}
+      <option value="{{ user }}">{{ user }}</option>
+    {% endfor %}
+  </select>
+  <br><div id="taker_error"></div><br>
+
+  <label for="duty_instructor">Duty Instructor:</label>
+  <select class="custom-select" style="max-width:250px;" id="duty_instructor" name="duty_instructor">
+    <option selected>Choose...</option>
+    {% for user in all_users %}
+      <option value="{{ user }}">{{ user }}</option>
+    {% endfor %}
+  </select>
+  <br><div id="di_error"></div><br>
+
+  <table id="minutes-table">
+    <tr>
+      <th>Speaker</th>
+      <th>Message</th>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><input class="form-control" type="text" id="speaker0" name="speaker" placeholder="Speaker"><br>
+      <button style="padding:0;" type="button" class="btn btn-warning mr-auto delete-row" id="delete-row0" onclick="deleteRow(this)">Delete Row</button>
+      </td>
+      <td><textarea class="form-control" id="write_up0" name="write_up" rows="4" cols="50" placeholder="Message"></textarea></td>
+    </tr>
+  </table>
+<br>
+<button style="padding:0;" type="button" class="btn btn-dark mr-auto" id="add-new-row">Add New Row</button><br><br>
+
+<div class="accordion" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Add Absentees
+        </button>
+      </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        {% for user in all_users %}
+          <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="{{ user }}" id="{{ user }}" name="absentees">
+          <label class="form-check-label" for="{{ user }}">
+            {{ user }}
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#toSubmit">
+  Submit
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="toSubmit" tabindex="-1" aria-labelledby="submitModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="submit-modal-body">
+        Are you sure you want to submit?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <input type="submit" class="btn btn-primary" name="submit" value="Submit for vetting" onclick="validatedate(document.form1.datepicker)">
+      </div>
+    </div>
+  </div>
+</div>
+
+</form>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $( function() {
+    $( "#datepicker" ).datepicker({
+      dateFormat: "dd-mm-yy",
+    });
+  } );
+  </script>
+<script type="text/javascript" src={% static 'first_app/minutes.js' %}></script>
+
+{% endblock %}

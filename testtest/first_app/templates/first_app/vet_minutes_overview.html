@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="jumbotron">
+        <h2>Minutes to vet:</h2><br>
+
+            <ul>
+            {% for minutes in minutes_to_vet %}
+              <li>
+              <a href="{% url 'vet_minutes_detailview' minutes_id=minutes.id %}">Minutes for {{ minutes.type_of_minutes }} on {{ minutes.date }}</a>
+              </li>
+
+            {% endfor %}
+            </ul><br>
+
+    </div>
+</div>
+
+
+
+{% endblock %}
