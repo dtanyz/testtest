@@ -26,6 +26,7 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name="index"),
     path('first_app/', include('first_app.urls'), name="first_app"),
     path('safety/', include('safety.urls'), name='safety'),
+    path('user_settings/', views.user_settings_view, name="user_settings_view"),
 ]
 
 if settings.DEBUG:

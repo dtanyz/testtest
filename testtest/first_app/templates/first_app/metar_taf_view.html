@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div style="text-align: center;">
+<div class="map-container">
+    <img src="{% static 'first_app/czxmap.png' %}" class="map-img">
+    <div class="card" id="czx-card">
+        <div class="card-body czx-body m-0 p-0">
+            <h5 class="card title">Cazaux</h5>
+            <p class="m-0 p-0">{{czx_metar}}</p>
+            <p class="m-0 p-0">{{czx_taf}}</p>
+        </div>
+    </div>
+    <div class="card" id="mdm-card">
+        <div class="card-body czx-body m-0 p-0">
+            <h5 class="card title">Mont-de-Marsan</h5>
+            <p class="m-0 p-0">{{mdm_metar}}</p>
+            <p class="m-0 p-0">{{mdm_taf}}</p>
+        </div>
+    </div>
+    <div class="card" id="bdx-card">
+        <div class="card-body czx-body m-0 p-0">
+            <h5 class="card title">Bordeaux</h5>
+            <p class="m-0 p-0">{{bdx_metar}}</p>
+            <p class="m-0 p-0">{{bdx_taf}}</p>
+        </div>
+    </div>
+    <div class="card" id="btz-card">
+        <div class="card-body czx-body m-0 p-0">
+            <h5 class="card title">Biarritz</h5>
+            <p class="m-0 p-0">{{btz_metar}}</p>
+            <p class="m-0 p-0">{{btz_taf}}</p>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

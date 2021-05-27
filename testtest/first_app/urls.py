@@ -15,4 +15,5 @@ urlpatterns = [
     path('opsbrief_minutes/detail/<int:minutes_id>/', views.opsbrief_minutes_detailview, name='opsbrief_minutes_detailview'),
     path('minutestovet/', views.vet_minutes_view, name='vet_minutes_view'),
     path('minutestovet/<int:minutes_id>/', views.vet_minutes_detailview, name='vet_minutes_detailview'),
+    path('metartaf/', views.metar_taf_view, name='metar_taf_view'),
 ]

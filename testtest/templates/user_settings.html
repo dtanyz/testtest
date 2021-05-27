@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Falcons</title>
+  {# bootstrap css #}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{% static 'first_app/style.css' %}">
+</head>
+<body class="bg-dark">
+  <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #2b2b2b;">
+    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'first_app/falconicon.png' %}"></a>  
+    {% if user.is_authenticated %}
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        {% if user.username == 'admin' %}
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'admin:index' %}">Admin <span class="sr-only">(current)</span></a>
+        </li>
+        {% endif %}
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Boldface/Ops Limit
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'form' %}">Boldface A</a>
+            <a class="dropdown-item" href="#">Boldface B</a>
+            <a class="dropdown-item" href="#">Ops Limit</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'metar_taf_view' %}">METAR/TAF</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Read & Sign
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'allopsbrief_minutes' %}">Ops Brief/EODD Minutes</a>
+            <a class="dropdown-item" href="{% url 'sam' %}">Safety Alert Msg</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'opsbrief_minutes_create' %}">Write Minutes</a>
+            <a class="dropdown-item" href="{% url 'vet_minutes_view' %}">Vet Minutes</a>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'board' %}">Go/NoGo Board</a>
+        </li>
+      </ul>
+      {% endif %}
+      <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+{% block content %}
+
+<div class="container">
+<h1>Boldface A</h1>
+<h2>{{ bf_user }} - 
+{% if boldface_a.is_complete %}
+PASS
+{% else %}
+FAIL
+{% endif %}
+</h2>
+</div>
+
+
+
+<form method="POST" autocomplete="off">
+  <div class="container">
+  {% csrf_token %}
+    <div class="row">
+    <div class="col-xl-6">
+    <div class="jumbotron jumbo bg-dark">
+      <div class="container">
+      <h3>Egress</h3>
+      <input type="text" class="input" id="bf0" name="bf0"> - <input type="text" class="input" id="bf1" name="bf1"><br>
+      <input type="text" class="input" id="bf2" name="bf2"> - <input type="text" class="input" id="bf3" name="bf3"><br>
+      <input type="text" class="input" id="bf4" name="bf4"> - <input type="text" class="input" id="bf5" name="bf5"><br>
+      <input type="text" class="input" id="bf6" name="bf6"> - <input type="text" class="input" id="bf7" name="bf7"><br>
+      <input type="text" class="input" id="bf8" name="bf8"> - <input type="text" class="input" id="bf9" name="bf9"><br>
+      <input type="text" class="input" id="bf10" name="bf10"> - <input type="text" class="input" id="bf11" name="bf11"><br>
+      <input type="text" class="input" id="bf12" name="bf12"> - <input type="text" class="input" id="bf13" name="bf13"><br>
+      <input type="text" class="input" id="bf14" name="bf14"> - <input type="text" class="input" id="bf15" name="bf15">
+    </div>
+    </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+      <h3>APU Fire on Ground</h3>
+      <input type="text" class="input" id="bf16" name="bf16"> - <input type="text" class="input" id="bf17" name="bf17"><br>
+      <input type="text" class="input" id="bf18" name="bf18"> - <input type="text" class="input" id="bf19" name="bf19"><br>
+      <input type="text" class="input" id="bf20" name="bf20"> - <input type="text" class="input" id="bf21" name="bf21"><br>
+      If fire is confirmed,<br>
+      <input type="text" class="input" id="bf22" name="bf22"> - <input type="text" class="input" id="bf23" name="bf23"><br>
+      <input type="text" class="input" id="bf24" name="bf24">
+    </div>
+  </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>Eng Fire on Ground</h3>
+        <input type="text" class="input" id="bf25" name="bf25"> - <input type="text" class="input" id="bf26" name="bf26"><br>
+        <input type="text" class="input" id="bf27" name="bf27"> - <input type="text" class="input" id="bf28" name="bf28"><br>
+        <input type="text" class="input" id="bf29" name="bf29"> - <input type="text" class="input" id="bf30" name="bf30"><br>
+        If fire is confirmed,<br>
+        <input type="text" class="input" id="bf31" name="bf31"> - <input type="text" class="input" id="bf32" name="bf32"><br>
+        <input type="text" class="input" id="bf33" name="bf33"><br>
+      </div>
+    </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>Eng Fire During Take-Off</h3>
+        If decision to stop is made,<br>
+        <input type="text" class="input" id="bf34" name="bf34"><br>
+        Once stopped,<br>
+        <input type="text" class="input wider" id="bf35" name="bf35"><br>
+        If take-off is continued,<br>
+        <input type="text" class="input" id="bf36" name="bf36"> - <input type="text" class="input" id="bf37" name="bf37"><br>
+        <input type="text" class="input" id="bf38" name="bf38"> - <input type="text" class="input" id="bf39" name="bf39"><br>
+        <input type="text" class="input" id="bf40" name="bf40"><br>
+      </div>
+    </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>Eng Fire in Flight</h3>
+        <input type="text" class="input" id="bf41" name="bf41"> - <input type="text" class="input" id="bf42" name="bf42"><br>
+        If fire is confirmed / WARN light on,<br>
+        <input type="text" class="input" id="bf43" name="bf43"> - <input type="text" class="input" id="bf44" name="bf44"><br>
+        <input type="text" class="input" id="bf45" name="bf45"> - <input type="text" class="input" id="bf46" name="bf46"><br>
+        <input type="text" class="input" id="bf47" name="bf47"> - <input type="text" class="input" id="bf48" name="bf48"><br>
+        If fire persists,<br>
+        <input type="text" class="input" id="bf49" name="bf49"><br>
+      </div>
+    </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>Eng Failure During Take-Off</h3>
+        If decision to stop is made,<br>
+        <input type="text" class="input" id="bf50" name="bf50"><br>
+        If take-off is continued,<br>
+        <input type="text" class="input" id="bf51" name="bf51"> - <input type="text" class="input" id="bf52" name="bf52"><br>
+        <input type="text" class="input" id="bf53" name="bf53"> - <input type="text" class="input" id="bf54" name="bf54"><br>
+        <input type="text" class="input" id="bf55" name="bf55"><br>
+      </div>
+    </div>
+
+  </div>
+    <div class="col-xl-6">
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>Double Engine Flameout</h3>
+        If loss of control / min safe ejection alt,<br>
+        <input type="text" class="input wider" id="bf56" name="bf56"><br>
+        Otherwise,<br>
+        <input type="text" class="input wider" id="bf57" name="bf57"><br> 
+        <input type="text" class="input wider" id="bf58" name="bf58"><br>
+        <input type="text" class="input" id="bf59" name="bf59"> - <input type="text" class="input" id="bf60" name="bf60"><br>
+        <input type="text" class="input" id="bf61" name="bf61"> - <input type="text" class="input" id="bf62" name="bf62"><br>
+      </div>
+    </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>L & R Bleed</h3>
+        <input type="text" class="input" id="bf63" name="bf63"> - <input type="text" class="input" id="bf64" name="bf64"><br>
+        <input type="text" class="input" id="bf65" name="bf65"> - <input type="text" class="input" id="bf66" name="bf66"><br> 
+        <input type="text" class="input" id="bf67" name="bf67"> - <input type="text" class="input" id="bf68" name="bf68"><br>
+        <input type="text" class="input" id="bf69" name="bf69"> - <input type="text" class="input" id="bf70" name="bf70"><br>
+        <input type="text" class="input" id="bf71" name="bf71"><br>
+      </div>
+    </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>AC and DC Fuel Pumps Failure</h3>
+        <input type="text" class="input wider" id="bf72" name="bf72"><br>
+        <input type="text" class="input wider" id="bf73" name="bf73"><br> 
+      </div>
+    </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>HYD Hot</h3>
+        <input type="text" class="input" id="bf74" name="bf74"> - <input type="text" class="input" id="bf75" name="bf75"><br>
+        (affected eng)<br>
+      </div>
+    </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>Abort Take-Off</h3>
+        <input type="text" class="input" id="bf76" name="bf76"> - <input type="text" class="input" id="bf77" name="bf77"><br>
+        <input type="text" class="input" id="bf78" name="bf78"> - <input type="text" class="input" id="bf79" name="bf79"><br> 
+      </div>
+    </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>FCS 3rd, etc.</h3>
+        If loss of control / avionics bay fire evident,<br>
+        <input type="text" class="input" id="bf80" name="bf80"><br>
+        Otherwise,<br>
+        <input type="text" class="input" id="bf81" name="bf81"> - <input type="text" class="input" id="bf82" name="bf82"><br> 
+        <input type="text" class="input" id="bf83" name="bf83"> - <input type="text" class="input" id="bf84" name="bf84"><br>
+      </div>
+    </div>
+
+    <div class="jumbotron jumbo">
+      <div class="container">
+        <h3>Loss of Control</h3>
+        Below 10,000ft AGL,<br>
+        <input type="text" class="input" id="bf85" name="bf85"><br>
+        Above 10,000ft AGL,<br>
+        <input type="text" class="input" id="bf86" name="bf86"> - <input type="text" class="input" id="bf87" name="bf87"><br> 
+        <input type="text" class="input" id="bf88" name="bf88"> - <input type="text" class="input" id="bf89" name="bf89"><br>
+        Not recovered within 5secs or 2 turns,<br>
+        <input type="text" class="input" id="bf90" name="bf90"> - <input type="text" class="input" id="bf91" name="bf91"><br> 
+        <input type="text" class="input" id="bf92" name="bf92"> - <input type="text" class="input" id="bf93" name="bf93"><br>
+        When spin stops,<br>
+        <input type="text" class="input" id="bf94" name="bf94"> - <input type="text" class="input" id="bf95" name="bf95"><br>
+      </div>
+    </div>
+
+  <input type="submit" class="btn btn-primary" name="Submit">
+</div>
+</div>
+</div>
+</form>
+
+{{ boldface_a_data|json_script:"boldface-data" }}
+
+{% endblock %}
+
+<script type="text/javascript" src="{% static 'first_app/script.js' %}"></script>
+
+{% if is_post_method %}
+  <script type="text/javascript">
+  for (ans in answers) {
+    if (ans === "bf_user") break;
+    else if (!answers[ans]) {
+        document.getElementById(`${ans}`).className += ' wrong';
+    }
+}
+  </script>
+{% endif %}
+
+{% block extra_script %}
+
+{% endblock %}
+
+</body>
+</html>

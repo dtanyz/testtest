@@ -7,6 +7,8 @@ from django.core import serializers
 from .forms import OBMinutesFormSet
 from datetime import datetime
 from django.contrib.auth import get_user_model
+import requests
+from bs4 import BeautifulSoup
 
 # Create your views here.
 class IndexView(TemplateView):
@@ -324,3 +326,75 @@ def vet_minutes_detailview(request, minutes_id):
     }
 
     return render(request, 'vet_minutes_detailview.html', context=context)
+
+
+# Weather
+
+def metar_taf_view(request):
+
+    airfields = ['LFBC', 'LFBM', 'LFBD', 'LFBZ']
+    all_metar = []
+    all_taf = []
+
+    for airfield in airfields:    
+        url = f"https://en.allmetsat.com/metar-taf/france.php?icao={airfield}"
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
+
+        page = requests.get(url, headers=headers)
+
+        soup = BeautifulSoup(page.content, "html.parser")
+
+        all_lines = soup.select(".mt")
+
+        all_p = soup.find_all("p")
+
+        metar = ""
+        taf = ""
+
+        for p in all_p:
+            if p.get_text().startswith("METAR"):
+                metar = p.get_text()
+            elif p.get_text().startswith("TAF"):
+                taf = p.get_text()
+    
+        if metar:
+            all_metar.append(metar)
+        else:
+            all_metar.append("No METAR available")
+
+        if taf:
+            all_taf.append(taf)
+        else:
+            all_taf.append("No TAF available")
+
+    czx_metar = all_metar[0]
+    czx_taf = all_taf[0]
+    mdm_metar = all_metar[1]
+    mdm_taf = all_taf[1]
+    bdx_metar = all_metar[2]
+    bdx_taf = all_taf[2]
+    btz_metar = all_metar[3]
+    btz_taf = all_taf[3]
+
+
+    context = {
+        'czx_metar': czx_metar,
+        'czx_taf': czx_taf,
+        'mdm_metar': mdm_metar,
+        'mdm_taf': mdm_taf,
+        'bdx_metar': bdx_metar,
+        'bdx_taf': bdx_taf,
+        'btz_metar': btz_metar,
+        'btz_taf': btz_taf,
+    }
+
+    return render(request, 'metar_taf_view.html', context=context)
+
+
+# User Settings
+
+def user_settings_view(request):
+
+    context = {}
+
+    return render(request, 'user_settings.html', context=context)
